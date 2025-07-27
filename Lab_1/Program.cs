@@ -2,9 +2,9 @@
 
 Console.WriteLine("Работа с классом Point2D");
 
-var pointA = new Point2D(10, 20);
-var pointB = new Point2D(10, 20);
-var pointC = new Point2D(4, 9);
+var pointA = new Point(10, 20);
+var pointB = new Point(10, 20);
+var pointC = new Point(4, 9);
 //var testPoint = new Point2D(-1, 1);
 
 if (pointA == pointB)
@@ -15,9 +15,9 @@ if (pointA != pointC)
 
 Console.WriteLine("Работа с классом Vector2D");
 
-var vectorA = new Vector2D(2, 4); // Стандартный конструктор
-var vectorB = new Vector2D(pointA, pointC); // Конструктор через точки
-var vectorC = new Vector2D(vectorA[1], vectorB[0]); // Доступ к элементам вектора по индексу
+var vectorA = new Vector(2, 4); // Стандартный конструктор
+var vectorB = new Vector(pointA, pointC); // Конструктор через точки
+var vectorC = new Vector(vectorA[1], vectorB[0]); // Доступ к элементам вектора по индексу
 
 Console.WriteLine($"Вектор B: {vectorB}");
 vectorB[1] = 1;
@@ -36,5 +36,5 @@ Console.WriteLine($"Демонстрация операторов:\n" +
                   $" A + C: {vectorA+vectorC}\n");
 
 Console.WriteLine($"Cкалярное произведение векторов A и B: {vectorA*vectorB}");
-Console.WriteLine($"Векторное произведение векторов A и B: {Vector2D.VectorProduct(vectorA, vectorB)}");
-Console.WriteLine($"Смешанное произведение векторов A, B и C: {Vector2D.MixedProduct(vectorA, vectorB, vectorC)}");
+Console.WriteLine($"Векторное произведение векторов A и B: {Vector.VectorProduct(vectorA, vectorB)}");
+Console.WriteLine($"Смешанное произведение векторов A, B и C: {Vector.MixedProduct(vectorA, vectorB, vectorC)}");

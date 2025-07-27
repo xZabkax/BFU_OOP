@@ -4,14 +4,13 @@ using System.Text;
 
 namespace Lab_2;
 
-public class Printer
+public class Printer(Color color = Color.White, (int, int) position = default, char symbol = '*')
 {
-    private string _text;
-    private int _color = (int)Color.Black;
-    private (int, int) _position;
-    private char _symbol = '*';
+    private Color _color { get; set; } = color;
+    private (int, int) _position { get; set; } = position;
+    private char _symbol { get; set; } = symbol;
 
-    public static void Print(string text, (int Left, int Top) position = default, int color = (int)Color.Black, char symbol = '*')
+    public static void Print(string text, (int Left, int Top) position = default, Color color = Color.White, char symbol = '*')
     {
         var font = ReadFont(symbol: symbol);
         
@@ -25,15 +24,15 @@ public class Printer
         const int fontSizeCoef = 5;
         
         Console.SetCursorPosition(position.Left * fontSizeCoef, position.Top *fontSizeCoef);
-
-        Console.ForegroundColor = (ConsoleColor)color;
+        
         
         foreach (var letter in text)
         {
             var cursorPosition = Console.GetCursorPosition();
             for (int i = 0; i < font[letter].Count; i++)
             {
-                Console.Write(font[letter][i]);
+                var output = $"\u001b[0;{(int)color};40m{font[letter][i]}\u001b[0m";
+                Console.Write(output);
                 Console.CursorTop += 1;
                 Console.CursorLeft = cursorPosition.Left;
             }
@@ -47,7 +46,7 @@ public class Printer
 
     }
 
-    private static Dictionary<char, List<string>> ReadFont(string fontFilePath = @"C:\Users\perva\RiderProjects\BFU_OOP\Lab_2\font.txt",
+    private static Dictionary<char, List<string>> ReadFont(string fontFilePath = @".\resources\font.txt",
         char symbol = '*')
     {
         var fontDict = new Dictionary<char, List<string>>();
@@ -66,10 +65,7 @@ public class Printer
                     
                     while ((line = reader.ReadLine()) is not "")
                     {
-                        if (line is null)
-                        {
-                            break;
-                        }
+                        if (line is null) break;
 
                         letterFromFont.Add(line.Replace('*', symbol));
                     }
