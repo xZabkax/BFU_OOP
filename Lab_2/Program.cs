@@ -2,6 +2,4 @@
 
 var printer = new Printer();
 
-//Printer.Print("fuck the cops", (1, 0), symbol: '#', color: Color.Blue);
-
-Console.WriteLine(Path.GetFileName("font.txt"));
+Printer.Print("fuck the cops", (1, 0), symbol: '#', color: Printer.Color.Blue);

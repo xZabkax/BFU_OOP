@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Lab_2;
 
-public class Printer(Color color = Color.White, (int, int) position = default, char symbol = '*')
+public class Printer(Printer.Color color = Printer.Color.White, (int, int) position = default, char symbol = '*')
 {
     private Color _color { get; set; } = color;
     private (int, int) _position { get; set; } = position;
@@ -31,7 +31,7 @@ public class Printer(Color color = Color.White, (int, int) position = default, c
             var cursorPosition = Console.GetCursorPosition();
             for (int i = 0; i < font[letter].Count; i++)
             {
-                var output = $"\u001b[0;{(int)color};40m{font[letter][i]}\u001b[0m";
+                var output = $"\u001b[0;{(int)color}m{font[letter][i]}\u001b[0m";
                 Console.Write(output);
                 Console.CursorTop += 1;
                 Console.CursorLeft = cursorPosition.Left;
@@ -91,16 +91,17 @@ public class Printer(Color color = Color.White, (int, int) position = default, c
         text = text.ToUpper();
         return text.All(c => font.ContainsKey(c));
     }
+    
+    public enum Color
+    {
+        Black = 30,
+        Red = 31,
+        Green = 32,
+        Yellow = 33,
+        Blue = 34,
+        Purple = 35,
+        Cyan = 36,
+        White = 37
+    }
 }
 
-public enum Color
-{
-    Black = 30,
-    Red = 31,
-    Green = 32,
-    Yellow = 33,
-    Blue = 34,
-    Purple = 35,
-    Cyan = 36,
-    White = 37
-}
