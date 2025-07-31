@@ -1,53 +1,76 @@
-﻿using System.Net.Mime;
-using System.Runtime.InteropServices;
-using System.Text;
+﻿using System.Text;
 
 namespace Lab_2;
 
-public class Printer(Printer.Color color = Printer.Color.White, (int, int) position = default, char symbol = '*')
+public class Printer : IDisposable
 {
-    private Color _color { get; set; } = color;
-    private (int, int) _position { get; set; } = position;
-    private char _symbol { get; set; } = symbol;
+    private readonly Color _color;
+    private readonly (int, int) _position;
+    private readonly char _symbol;
+    private static readonly Dictionary<char, List<string>> _font = LoadFont();
+    private static readonly int _fontHeight = _font.Values.First().Count;         // Полагаем, что высота и ширина
+    private static readonly int _fontWidth = _font.Values.First().First().Length; // одна и та же для каждого символа
+
+    private int _savedCursorLeft;
+    private int _savedCursorTop;
+
+    private bool _disposed;
+
+    public Printer(Color color = Color.White, (int, int) position = default, char symbol = '*')
+    {
+        _color = color;
+        _position = position;
+        _symbol = symbol;
+    }
 
     public static void Print(string text, (int Left, int Top) position = default, Color color = Color.White, char symbol = '*')
     {
-        var font = ReadFont(symbol: symbol);
-        
-        if (!ValidateText(text, font))
+        if (!ValidateText(text, _font))
         {
             throw new Exception("Incorrect input");
         }
         
         text = text.ToUpper();
-
-        const int fontSizeCoef = 5;
         
-        Console.SetCursorPosition(position.Left * fontSizeCoef, position.Top *fontSizeCoef);
-        
+        Console.SetCursorPosition(position.Left * (_fontWidth+1), position.Top * _fontHeight);
         
         foreach (var letter in text)
         {
-            var cursorPosition = Console.GetCursorPosition();
-            for (int i = 0; i < font[letter].Count; i++)
+            for (int i = 0; i < _fontHeight; i++)
             {
-                var output = $"\u001b[0;{(int)color}m{font[letter][i]}\u001b[0m";
+                var output = $"\u001b[0;{(int)color}m{_font[letter][i]}\u001b[0m";
+                if (symbol != '*')
+                {
+                    output = output.Replace('*', symbol);
+                }
                 Console.Write(output);
                 Console.CursorTop += 1;
-                Console.CursorLeft = cursorPosition.Left;
+                Console.CursorLeft -= _fontWidth;
             }
 
-            Console.CursorLeft += font[letter].Count + 1;
-            Console.CursorTop = 0;
+            Console.CursorLeft += _fontWidth + 1;
+            Console.CursorTop -= _fontHeight;
         }
 
         Console.CursorLeft = 0;
-        Console.CursorTop = 5;
-
+        Console.CursorTop += _fontHeight;
     }
 
-    private static Dictionary<char, List<string>> ReadFont(string fontFilePath = @".\resources\font.txt",
-        char symbol = '*')
+    public void Print(string text)
+    {
+
+        (int, int) position = default;
+
+        if (_position == default)
+        {
+            position = (Console.CursorLeft, Console.CursorTop);
+        }
+        
+        Print(text, color: _color, position: position, symbol: _symbol);
+        
+    }
+
+    private static Dictionary<char, List<string>> LoadFont(string fontFilePath = @".\resources\font.txt")
     {
         var fontDict = new Dictionary<char, List<string>>();
         
@@ -63,14 +86,14 @@ public class Printer(Printer.Color color = Printer.Color.White, (int, int) posit
                     currentLetter = line[0];
                     List<string> letterFromFont = new List<string>();
                     
-                    while ((line = reader.ReadLine()) is not "")
+                    while (!string.IsNullOrWhiteSpace(line = reader.ReadLine()))
                     {
-                        if (line is null) break;
-
-                        letterFromFont.Add(line.Replace('*', symbol));
+                        letterFromFont.Add(line);
                     }
 
                     fontDict.Add(currentLetter, letterFromFont);
+                    
+                    
                 }
             }
         }
@@ -91,7 +114,12 @@ public class Printer(Printer.Color color = Printer.Color.White, (int, int) posit
         text = text.ToUpper();
         return text.All(c => font.ContainsKey(c));
     }
-    
+
+    public void Dispose()
+    {
+        //GC.SuppressFinalize(this);
+    }
+
     public enum Color
     {
         Black = 30,
@@ -101,7 +129,7 @@ public class Printer(Printer.Color color = Printer.Color.White, (int, int) posit
         Blue = 34,
         Purple = 35,
         Cyan = 36,
-        White = 37
+        White = 39
     }
 }
 

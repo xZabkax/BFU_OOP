@@ -2,8 +2,8 @@
 
 public class Point
 {
-    public int x { get; }
-    public int y { get; }
+    public int x { get; set; }
+    public int y { get; set; }
 
     public Point(int X=0, int Y=0)
     {
