@@ -3,4 +3,4 @@
 public interface ILogHandler
 {
     void Handle(string text);
-}
+}   

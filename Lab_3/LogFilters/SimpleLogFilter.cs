@@ -1,9 +1,17 @@
 ﻿namespace Lab_3;
 
-public class SimpleLogFilter : ILogFilter
+public class SimpleLogFilter(string pattern) : ILogFilter
 {
     public bool IsMatch(string text)
     {
-        throw new NotImplementedException();
+        try
+        {
+            return text.Contains(pattern);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
     }
 }

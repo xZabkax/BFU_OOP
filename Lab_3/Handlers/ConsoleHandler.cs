@@ -2,8 +2,5 @@
 
 public class ConsoleHandler : ILogHandler
 {
-    public void Handle(string text)
-    {
-        throw new NotImplementedException();
-    }
+    public void Handle(string text) => Console.WriteLine($"[CONSOLE] {DateTime.Now} {text}");
 }

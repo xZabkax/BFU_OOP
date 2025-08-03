@@ -8,24 +8,26 @@
     "net8.0": []
   },
   "packageFolders": {
-    "C:\\Users\\User\\.nuget\\packages\\": {}
+    "C:\\Users\\perva\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\User\\RiderProjects\\BFU_OOP\\Lab_4\\Lab_4.csproj",
+      "projectUniqueName": "C:\\Users\\perva\\RiderProjects\\BFU_OOP\\Lab_4\\Lab_4.csproj",
       "projectName": "Lab_4",
-      "projectPath": "C:\\Users\\User\\RiderProjects\\BFU_OOP\\Lab_4\\Lab_4.csproj",
-      "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\User\\RiderProjects\\BFU_OOP\\Lab_4\\obj\\",
+      "projectPath": "C:\\Users\\perva\\RiderProjects\\BFU_OOP\\Lab_4\\Lab_4.csproj",
+      "packagesPath": "C:\\Users\\perva\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\perva\\RiderProjects\\BFU_OOP\\Lab_4\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\perva\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -59,7 +61,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.303/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\PROGRAM FILES\\DOTNET\\sdk\\8.0.202/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

@@ -1,9 +1,8 @@
 ﻿namespace Lab_3;
 
-public class FileHandler : ILogHandler
+public class FileHandler(string filePath) : ILogHandler
 {
-    public void Handle(string text)
-    {
-        throw new NotImplementedException();
-    }
+    private readonly string _filePath = filePath;
+
+    public void Handle(string text) => File.AppendAllText(_filePath, $"{DateTime.Now} {text}\n");
 }

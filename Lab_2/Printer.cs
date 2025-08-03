@@ -92,8 +92,6 @@ public class Printer : IDisposable
                     }
 
                     fontDict.Add(currentLetter, letterFromFont);
-                    
-                    
                 }
             }
         }
