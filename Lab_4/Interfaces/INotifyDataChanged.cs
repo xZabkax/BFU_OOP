@@ -1,7 +1,8 @@
 ﻿namespace Lab_4;
 
-public interface INotifyDataChanged
+public interface INotifyDataChanged<T>
 {
-    void AddPropertyChangedListener(IPropertyChangedListener listener);
-    void RemovePropertyChangedListener(IPropertyChangedListener listener);
+    void AddPropertyChangedListeners(params IPropertyChangedListener<T>[] listeners);
+    void RemovePropertyChangedListeners(params IPropertyChangedListener<T>[] listeners);
+    void NotifyPropertyChanged(T obj, string propertyName);
 }

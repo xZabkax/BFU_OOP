@@ -1,13 +1,14 @@
 ﻿namespace Lab_5;
 
-public record class User 
+public record User()
 {
-    int id;
-    string name;
-    string login;
-    string password;
-    string email;
-    string address;
+    private int id;
+    private string name;
+    private string login;
+    private string password;
+    private string email;
+    private string address;
     
-    //TODO Коллекция классов User должна уметь сортироваться по полю name
+    //TODO - Сделать, чтобы коллекция классов User умела сортироваться по полю name.
+    //TODO Реализовать через dataclass или через аналоги в других языках (C# и Java: record)
 }

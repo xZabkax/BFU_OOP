@@ -1,6 +1,6 @@
 ﻿namespace Lab_4;
 
-public interface IPropertyChangingListener
+public interface IPropertyChangingListener<T>
 {
-    bool OnPropertyChanging(Object T, string propertyName, int oldValue, int newValue);
+    bool OnPropertyChanging(T obj, string propertyName, object oldValue, object newValue);
 }

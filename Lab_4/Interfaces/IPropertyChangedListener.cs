@@ -1,6 +1,6 @@
 ﻿namespace Lab_4;
 
-public interface IPropertyChangedListener
+public interface IPropertyChangedListener<T>
 {
-    void OnPropertyChanged(Object T, string propertyName);
+    void OnPropertyChanged(T obj ,string propertyName);
 }

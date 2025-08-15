@@ -1,28 +1,28 @@
 ﻿namespace Lab_5;
 
-public class DataRepository : IDataRepository
+public class DataRepository<T>: IDataRepository<T>
 {
-    public List<object> GetAll()
+    public List<T> GetAll()
     {
         throw new NotImplementedException();
     }
 
-    public object? GetById(int id)
+    public T? GetById(int id)
     {
         throw new NotImplementedException();
     }
 
-    public void Add(object T)
+    public void Add(T item)
     {
         throw new NotImplementedException();
     }
 
-    public void Update(object T)
+    public void Update(T item)
     {
         throw new NotImplementedException();
     }
 
-    public void Delete(object T)
+    public void Delete(T item)
     {
         throw new NotImplementedException();
     }

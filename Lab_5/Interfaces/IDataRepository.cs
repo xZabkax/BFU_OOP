@@ -1,6 +1,6 @@
 ﻿namespace Lab_5;
 
-public interface IDataRepository
+public interface IDataRepository<T>
 {
     /*- get_all(self) -> Sequence[T]
     - get_by_id(self, id: int) -> T | None
@@ -8,9 +8,9 @@ public interface IDataRepository
     - update(self, item: T) -> None
     - delete(self, item: T) -> None*/
 
-    List<Object> GetAll();
-    Object? GetById(int id);
-    void Add(Object T);
-    void Update(Object T);
-    void Delete(Object T);
+    List<T> GetAll();
+    T? GetById(int id);
+    void Add(T item);
+    void Update(T item);
+    void Delete(T item);
 }
