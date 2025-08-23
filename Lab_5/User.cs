@@ -1,14 +1,24 @@
-﻿namespace Lab_5;
+﻿using System.Collections;
+using System.Text.Json.Serialization;
 
-public record User()
+namespace Lab_5;
+
+public record User : IComparable<User>
 {
-    private int id;
-    private string name;
-    private string login;
-    private string password;
-    private string email;
-    private string address;
-    
-    //TODO - Сделать, чтобы коллекция классов User умела сортироваться по полю name.
-    //TODO Реализовать через dataclass или через аналоги в других языках (C# и Java: record)
+    public required int Id { get; init; }
+    public required string Name { get; set; }
+    public required string Login { get; init; }
+    [JsonIgnore] public required string Password { get; set; }
+    public string? Email { get; set; }
+    public string? Address { get; set; }
+
+    public int CompareTo(User? other)
+    {
+        return other == null ? 1 : Name.CompareTo(other.Name);
+    }
+
+    public override string ToString()
+    {
+        return $"User(Id: {Id}, Name: {Name}, Login: {Login}, Email: {Email ?? "N/A"}, Address: {Address ?? "N/A"}";
+    }
 }

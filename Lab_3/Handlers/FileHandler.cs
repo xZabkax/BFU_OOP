@@ -2,7 +2,16 @@
 
 public class FileHandler(string filePath) : ILogHandler
 {
-    private readonly string _filePath = filePath;
-
-    public void Handle(string text) => File.AppendAllText(_filePath, $"{DateTime.Now} {text}\n");
+    public void Handle(string text)
+    {
+        try
+        {
+            File.AppendAllText(filePath, $"{DateTime.Now} {text}\n");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    } 
 }

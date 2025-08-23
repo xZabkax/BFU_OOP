@@ -14,8 +14,8 @@ public class Point
             throw new ArgumentOutOfRangeException($"x должен быть в диапазоне [0, {WIDTH}]");
         if (Y < 0 || Y > HEIGHT)
             throw new ArgumentOutOfRangeException($"y должен быть в диапазоне [0, {HEIGHT}]");
-        this.x = X;
-        this.y = Y;
+        x = X;
+        y = Y;
     }
         
     public static bool operator ==(Point pointA, Point pointB)

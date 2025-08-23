@@ -9,7 +9,7 @@ var filters = new List<ILogFilter>
 var handlers = new List<ILogHandler>
 {
     new ConsoleHandler(),
-    new FileHandler(@"C:\Users\perva\RiderProjects\BFU_OOP\Lab_3\log.txt"),
+    new FileHandler(@".\log.txt"),
     new SocketHandler(),
     new SysLogHandler()
 };

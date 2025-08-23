@@ -1,3 +1,29 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿using Lab_6;
 
-Console.WriteLine("Hello, World!");
+var keyboard = new Keyboard();
+
+keyboard.AddKeyBinding("a", new PrintCharCommand('a', keyboard.TextBuffer));
+keyboard.AddKeyBinding("b", new PrintCharCommand('b', keyboard.TextBuffer));
+keyboard.AddKeyBinding("c", new PrintCharCommand('c', keyboard.TextBuffer));
+keyboard.AddKeyBinding("d", new PrintCharCommand('d', keyboard.TextBuffer));
+keyboard.AddKeyBinding("ctrl++", new VolumeUpCommand());
+keyboard.AddKeyBinding("ctrl+-", new VolumeDownCommand());
+keyboard.AddKeyBinding("ctrl+p", new MediaPlayerCommand());
+
+keyboard.ActivateKeyBinding("a");
+keyboard.ActivateKeyBinding("b");
+keyboard.ActivateKeyBinding("c");
+
+keyboard.Undo();
+keyboard.Undo();
+keyboard.Redo();
+
+keyboard.ActivateKeyBinding("ctrl++");
+keyboard.ActivateKeyBinding("ctrl+-");
+keyboard.ActivateKeyBinding("ctrl+p");
+
+keyboard.ActivateKeyBinding("d");
+keyboard.Undo();
+keyboard.Undo();
+
+keyboard.ActivateKeyBinding("z");

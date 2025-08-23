@@ -115,7 +115,7 @@ public class Printer : IDisposable
 
     public void Dispose()
     {
-        //GC.SuppressFinalize(this);
+        GC.SuppressFinalize(this);
     }
 
     public enum Color

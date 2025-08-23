@@ -1,11 +1,30 @@
 {
   "version": 3,
   "targets": {
-    "net8.0": {}
+    "net8.0": {
+      "Lab_6/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "compile": {
+          "bin/placeholder/Lab_6.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Lab_6.dll": {}
+        }
+      }
+    }
   },
-  "libraries": {},
+  "libraries": {
+    "Lab_6/1.0.0": {
+      "type": "project",
+      "path": "../Lab_6/Lab_6.csproj",
+      "msbuildProject": "../Lab_6/Lab_6.csproj"
+    }
+  },
   "projectFileDependencyGroups": {
-    "net8.0": []
+    "net8.0": [
+      "Lab_6 >= 1.0.0"
+    ]
   },
   "packageFolders": {
     "C:\\Users\\perva\\.nuget\\packages\\": {}
@@ -33,7 +52,11 @@
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Users\\perva\\RiderProjects\\BFU_OOP\\Lab_6\\Lab_6.csproj": {
+              "projectPath": "C:\\Users\\perva\\RiderProjects\\BFU_OOP\\Lab_6\\Lab_6.csproj"
+            }
+          }
         }
       },
       "warningProperties": {

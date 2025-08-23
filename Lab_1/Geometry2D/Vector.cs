@@ -92,7 +92,7 @@ public class Vector
         // Сравнение векторов на эквивалентность
         public static bool operator ==(Vector vectorA, Vector vectorB)
         {
-            return vectorA.x == vectorB.x & vectorA.y == vectorB.y;
+            return vectorA.x == vectorB.x && vectorA.y == vectorB.y;
         }
         
         public static bool operator !=(Vector vectorA, Vector vectorB)
@@ -113,7 +113,7 @@ public class Vector
         
         public int ScalarProduct(Vector otherVector)
         {
-            return this.x * otherVector.x + this.y * otherVector.y;
+            return x * otherVector.x + y * otherVector.y;
         }
         
         // Векторное произведение векторов (Возвращает значение z координаты результирующего вектора)
@@ -124,7 +124,7 @@ public class Vector
 
         public int VectorProduct(Vector otherVector)
         {
-            return this.x * otherVector.y - this.y * otherVector.x;
+            return x * otherVector.y - y * otherVector.x;
         }
         
         // Смешанное произведение векторов

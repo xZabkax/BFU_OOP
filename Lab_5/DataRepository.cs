@@ -1,29 +1,83 @@
-﻿namespace Lab_5;
+﻿using System.Reflection;
+using System.Text.Json;
 
-public class DataRepository<T>: IDataRepository<T>
+namespace Lab_5;
+
+public abstract class DataRepository<T> : IDataRepository<T> where T : class
 {
-    public List<T> GetAll()
+    protected readonly string _filePath;
+    protected List<T> _items = new();
+
+    protected DataRepository(string filePath)
     {
-        throw new NotImplementedException();
+        _filePath = filePath;
+        LoadData();
+    }
+
+    private void LoadData()
+    {
+        if (!File.Exists(_filePath)) return;
+        try
+        {
+            var json = File.ReadAllText(_filePath);
+            _items = JsonSerializer.Deserialize<List<T>>(json) ?? new List<T>();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
+
+    private void SaveData()
+    {
+        try
+        {
+            var json = JsonSerializer.Serialize(_items);
+            File.WriteAllText(_filePath, json);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
+
+    public IEnumerable<T> GetAll()
+    {
+        return _items.AsReadOnly();
     }
 
     public T? GetById(int id)
     {
-        throw new NotImplementedException();
+        return _items.FirstOrDefault(item => (int)item.GetType().GetProperty("Id")!.GetValue(item)! == id);
     }
 
     public void Add(T item)
     {
-        throw new NotImplementedException();
+        _items.Add(item);
+        SaveData();
     }
 
     public void Update(T item)
     {
-        throw new NotImplementedException();
+        var id = (int)item.GetType().GetProperty("Id")!.GetValue(item)!;
+        var itemInList = GetById(id);
+        
+        if (itemInList is null) return;
+
+        _items[_items.IndexOf(itemInList)] = item;
+        SaveData();
     }
 
     public void Delete(T item)
     {
-        throw new NotImplementedException();
+        var id = (int)item.GetType().GetProperty("Id")!.GetValue(item)!;
+        var itemInList = GetById(id);
+
+        if (itemInList is null) return;
+        
+        _items.Remove(itemInList);
+        SaveData();
     }
 }
