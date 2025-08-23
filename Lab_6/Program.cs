@@ -27,3 +27,9 @@ keyboard.Undo();
 keyboard.Undo();
 
 keyboard.ActivateKeyBinding("z");
+
+var bindings = keyboard.GetBindinds();
+
+var bindingsToSave = bindings.Select(item
+    => new KeyValuePair<string,string>(item.Key, item.Value.GetType().Name));
+

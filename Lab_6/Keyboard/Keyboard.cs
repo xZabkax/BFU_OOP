@@ -1,6 +1,6 @@
 ﻿namespace Lab_6;
 
-public class Keyboard
+public class Keyboard : IDisposable
 {
     private Dictionary<string, ICommand> _keyBindings = new();
     private readonly Stack<ICommand> _undoStack  = new();
@@ -95,5 +95,10 @@ public class Keyboard
 
         internal Dictionary<string, ICommand> GetBindings() => _keyBindings;
     }
-    
+
+    public void Dispose()
+    {
+        KeyboardStateSaver.SaveState(new Memento(_keyBindings));
+        GC.SuppressFinalize(this);
+    }
 }
