@@ -1,14 +1,30 @@
 ﻿using Lab_6;
 
-var keyboard = new Keyboard();
+try
+{
+    var dir = new DirectoryInfo(Directory.GetCurrentDirectory());
+    Directory.SetCurrentDirectory(dir.Parent.Parent.Parent.FullName);
+}
+catch
+{
+    Console.WriteLine("Couldn't set a new working directory");
+    throw;
+}
+finally
+{
+    Console.WriteLine("Current working directory: " + Directory.GetCurrentDirectory() +  "\n");
+}
 
-keyboard.AddKeyBinding("a", new PrintCharCommand('a', keyboard.TextBuffer));
-keyboard.AddKeyBinding("b", new PrintCharCommand('b', keyboard.TextBuffer));
-keyboard.AddKeyBinding("c", new PrintCharCommand('c', keyboard.TextBuffer));
-keyboard.AddKeyBinding("d", new PrintCharCommand('d', keyboard.TextBuffer));
-keyboard.AddKeyBinding("ctrl++", new VolumeUpCommand());
-keyboard.AddKeyBinding("ctrl+-", new VolumeDownCommand());
-keyboard.AddKeyBinding("ctrl+p", new MediaPlayerCommand());
+var keyboard = new Keyboard();
+var mediaPlayer = new MediaPlayer();
+
+keyboard.AddKeyBinding("a", new PrintCharCommand(keyboard, 'a'));
+keyboard.AddKeyBinding("b", new PrintCharCommand(keyboard, 'b'));
+keyboard.AddKeyBinding("c", new PrintCharCommand(keyboard, 'c'));
+keyboard.AddKeyBinding("d", new PrintCharCommand(keyboard, 'd'));
+keyboard.AddKeyBinding("ctrl++", new VolumeUpCommand(mediaPlayer));
+keyboard.AddKeyBinding("ctrl+-", new VolumeDownCommand(mediaPlayer));
+keyboard.AddKeyBinding("ctrl+p", new MediaPlayerCommand(mediaPlayer));
 
 keyboard.ActivateKeyBinding("a");
 keyboard.ActivateKeyBinding("b");
@@ -28,8 +44,4 @@ keyboard.Undo();
 
 keyboard.ActivateKeyBinding("z");
 
-var bindings = keyboard.GetBindinds();
-
-var bindingsToSave = bindings.Select(item
-    => new KeyValuePair<string,string>(item.Key, item.Value.GetType().Name));
-
+KeyboardStateSaver.Save(keyboard);

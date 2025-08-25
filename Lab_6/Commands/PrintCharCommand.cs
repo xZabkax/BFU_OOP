@@ -1,47 +1,30 @@
 ﻿namespace Lab_6;
 
-public class PrintCharCommand : ICommand
+public class PrintCharCommand : Command
 {
-    private readonly char _char;
-    private readonly List<char> _textBuffer;
+    private readonly Keyboard _keyboard;
+    private readonly char _key;
 
-    public PrintCharCommand(char c, List<char> textBuffer)
+    public PrintCharCommand(Keyboard keyboard, char key) : base(keyboard)
     {
-        _char = c;
-        _textBuffer = textBuffer;
+        _keyboard = keyboard;
+        _key = key;
     }
 
-    public void Execute()
+    public override void Execute()
     {
-        _textBuffer.Add(_char);
-        string str = string.Concat(_textBuffer);
-        
-        try
-        {
-            File.AppendAllText(Keyboard.OutputFilePath, str + "\n");
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
-        }
+        SaveBackup();
+        _keyboard.Output.AddChar(_key);
     }
 
-    public void Undo()
+    public override void Redo()
     {
-        if (_textBuffer.Count == 0) return;
-        
-        _textBuffer.RemoveAt(_textBuffer.Count - 1);
-        string str = string.Concat(_textBuffer);
-        
-        try
-        {
-            File.AppendAllText(Keyboard.OutputFilePath, str + "\n");
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
-        }
+        _keyboard.Output.AddChar(_key);
+    }
+
+    public override void Undo()
+    {
+        base.Undo();
+        _keyboard.Output.Write(_keyboard.Output.Text);
     }
 }

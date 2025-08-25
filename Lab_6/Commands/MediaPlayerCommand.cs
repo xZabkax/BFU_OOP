@@ -1,30 +1,28 @@
 ﻿namespace Lab_6;
 
-public class MediaPlayerCommand : ICommand 
+public class MediaPlayerCommand : Command
 {
-    public void Execute()
+    private readonly MediaPlayer _mediaPlayer;
+    public MediaPlayerCommand(MediaPlayer mediaPlayer) : base(mediaPlayer)
     {
-        try
-        {
-            File.AppendAllText(Keyboard.OutputFilePath, "Media player launched\n");
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
-        }
+        _mediaPlayer = mediaPlayer;
+    }
+    
+    public override void Execute()
+    {
+        SaveBackup();
+        _mediaPlayer.Launch();
     }
 
-    public void Undo()
+    public override void Redo()
     {
-        try
-        {
-            File.AppendAllText(Keyboard.OutputFilePath, "Media player closed\n");
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
-        }
+        _mediaPlayer.Launch();
     }
+
+    public override void Undo()
+    {
+        base.Undo();
+        _mediaPlayer.Close();
+    }
+    
 }

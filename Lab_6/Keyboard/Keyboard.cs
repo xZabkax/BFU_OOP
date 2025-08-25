@@ -1,32 +1,31 @@
 ﻿namespace Lab_6;
 
-public class Keyboard : IDisposable
+public class Keyboard : IOriginator
 {
-    private Dictionary<string, ICommand> _keyBindings = new();
-    private readonly Stack<ICommand> _undoStack  = new();
-    private readonly Stack<ICommand> _redoStack = new();
-    public const string OutputFilePath = "output.txt";
-    public List<char> TextBuffer { get; } = new();
-
-    static Keyboard()
-    {
-        try
-        {
-            File.WriteAllText(OutputFilePath, "");
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
-        }
-    }
+    private Dictionary<string, Command> _keyBindings;
+    private readonly CommandManager _commandManager;
+    public readonly OutputManager Output;
     
-    public void AddKeyBinding(string key, ICommand command)
+    public Keyboard()
     {
-        _keyBindings.Add(key, command);
+        _commandManager = new CommandManager();
+        Output = new OutputManager();
+        KeyboardStateSaver.Load(this);
     }
 
-    public void ChangeKeyBinding(string key, ICommand command)
+    public void AddKeyBinding(string key, Command command)
+    {
+        if (_keyBindings.TryGetValue(key, out var existingCommand))
+        {
+            Console.WriteLine($"Key binding already exists {(key, existingCommand)}");
+        }
+        else
+        {
+            _keyBindings.Add(key, command);
+        }
+    }
+
+    public void ChangeKeyBinding(string key, Command command)
     {
         if (_keyBindings.ContainsKey(key))
         {
@@ -42,9 +41,7 @@ public class Keyboard : IDisposable
     {
         if (_keyBindings.TryGetValue(key, out var command))
         {
-            command.Execute();
-            _undoStack.Push(command);
-            _redoStack.Clear();
+            _commandManager.ActivateCommand(command);
             Console.WriteLine(key);
         }
         else
@@ -55,50 +52,40 @@ public class Keyboard : IDisposable
 
     public void Undo()
     {
-        if (_undoStack.Count == 0) return;
-        
-        ICommand command = _undoStack.Pop();
-        command.Undo();
-        _redoStack.Push(command);
-        Console.WriteLine("Undo");
+        _commandManager.Undo();
     }
 
     public void Redo()
     {
-        if (_redoStack.Count == 0) return;
-        
-        ICommand command = _redoStack.Pop();
-        command.Execute();
-        _undoStack.Push(command);
-        Console.WriteLine("Redo");
-    }
-
-    public Memento SaveState()
-    {
-        return new Memento(_keyBindings);
+        _commandManager.Redo();
     }
     
-    public void LoadState(Memento memento)
+    public IMemento SaveState()
     {
-        _keyBindings = memento.GetBindings();
+        return new Memento(this, _keyBindings, Output.Text);
     }
-    
 
-    public record Memento
+    public bool IsBindingsEmptyOrNull() => _keyBindings.Count == 0 || _keyBindings == null;
+
+    public record Memento : IMemento
     {
-        private readonly Dictionary<string, ICommand> _keyBindings;
+        private readonly Keyboard _keyboard;
+        private readonly Dictionary<string, Command> _keyBindings;
+        private readonly string _text;
 
-        public Memento(Dictionary<string, ICommand> keyBindings)
+        public Memento(Keyboard keyboard, Dictionary<string, Command> keyBindings, string text)
         {
+            _keyboard = keyboard;
             _keyBindings = keyBindings;
+            _text = text;
         }
 
-        internal Dictionary<string, ICommand> GetBindings() => _keyBindings;
-    }
+        public void RestoreState()
+        {
+            _keyboard._keyBindings = _keyBindings;
+            _keyboard.Output.Text = _text;
+        }
 
-    public void Dispose()
-    {
-        KeyboardStateSaver.SaveState(new Memento(_keyBindings));
-        GC.SuppressFinalize(this);
+        public Dictionary<string, Command> GetBindings() => _keyBindings;
     }
 }

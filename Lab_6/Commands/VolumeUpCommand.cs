@@ -1,30 +1,28 @@
 ﻿namespace Lab_6;
 
-public class VolumeUpCommand : ICommand
+public class VolumeUpCommand : Command
 {
-    public void Execute()
+    private readonly MediaPlayer _mediaPlayer;
+
+    public VolumeUpCommand(MediaPlayer mediaPlayer) : base(mediaPlayer)
     {
-        try
-        {
-            File.AppendAllText(Keyboard.OutputFilePath, "Volume increased +20%" + "\n");
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
-        }
+        _mediaPlayer = mediaPlayer;
     }
 
-    public void Undo()
+    public override void Execute()
     {
-        try
-        {
-            File.AppendAllText(Keyboard.OutputFilePath, "Volume decreased +20%" + "\n");
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
-        }
+        SaveBackup();
+        _mediaPlayer.VolumeUp();
+    }
+
+    public override void Redo()
+    {
+        _mediaPlayer.VolumeUp();
+    }
+
+    public override void Undo()
+    {
+        base.Undo();
+        _mediaPlayer.VolumeDown();
     }
 }
