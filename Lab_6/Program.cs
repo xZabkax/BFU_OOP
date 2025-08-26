@@ -16,32 +16,45 @@ finally
 }
 
 var keyboard = new Keyboard();
-var mediaPlayer = new MediaPlayer();
+var mediaPlayer = MediaPlayer.GetInstance();
 
-keyboard.AddKeyBinding("a", new PrintCharCommand(keyboard, 'a'));
-keyboard.AddKeyBinding("b", new PrintCharCommand(keyboard, 'b'));
-keyboard.AddKeyBinding("c", new PrintCharCommand(keyboard, 'c'));
-keyboard.AddKeyBinding("d", new PrintCharCommand(keyboard, 'd'));
+var alphabet = new string(Enumerable.Range('a', 'z' - 'a' + 1).Select(c => (char)c).ToArray());
+
+foreach (var letter in alphabet)
+{     
+    keyboard.AddKeyBinding(letter.ToString(), new PrintCharCommand(keyboard, letter));
+}
+
 keyboard.AddKeyBinding("ctrl++", new VolumeUpCommand(mediaPlayer));
 keyboard.AddKeyBinding("ctrl+-", new VolumeDownCommand(mediaPlayer));
-keyboard.AddKeyBinding("ctrl+p", new MediaPlayerCommand(mediaPlayer));
+keyboard.AddKeyBinding("ctrl+p", new MediaPlayerLaunchCommand(mediaPlayer));
+keyboard.AddKeyBinding("ctrl+o", new MediaPlayerCloseCommand(mediaPlayer));
 
-keyboard.ActivateKeyBinding("a");
-keyboard.ActivateKeyBinding("b");
-keyboard.ActivateKeyBinding("c");
+const string stopWord = "stop", undoWord = "undo", redoWord = "redo";
 
-keyboard.Undo();
-keyboard.Undo();
-keyboard.Redo();
+Console.WriteLine($"\nVirtual keyboard launched. To see the results check \"{keyboard.Output.GetPath()}\"\nEnter \"{stopWord}\" to close program");
+while (true)
+{
+    var input = Console.ReadLine();
 
-keyboard.ActivateKeyBinding("ctrl++");
-keyboard.ActivateKeyBinding("ctrl+-");
-keyboard.ActivateKeyBinding("ctrl+p");
+    switch (input)
+    {
+        case stopWord:
+            goto SaveAndExit;
+        case undoWord:
+            keyboard.Undo();
+            break;
+        case redoWord:
+            keyboard.Redo();
+            break;
+        default:
+            keyboard.ActivateKeyBinding(input);
+            break;
+    }
+}
 
-keyboard.ActivateKeyBinding("d");
-keyboard.Undo();
-keyboard.Undo();
+SaveAndExit:
+    KeyboardStateSaver.Save(keyboard);
 
-keyboard.ActivateKeyBinding("z");
 
-KeyboardStateSaver.Save(keyboard);
+

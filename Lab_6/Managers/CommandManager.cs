@@ -4,7 +4,7 @@ public class CommandManager
 {
     private readonly Stack<Command> _undoStack = new();
     private readonly Stack<Command> _redoStack = new();
-    
+
     public void ActivateCommand(Command command)
     {
         command.Execute();
@@ -19,7 +19,6 @@ public class CommandManager
         Command command = _undoStack.Pop();
         command.Undo();
         _redoStack.Push(command);
-        Console.WriteLine("Undo");
     }
 
     public void Redo()
@@ -27,8 +26,7 @@ public class CommandManager
         if (_redoStack.Count == 0) return;
         
         Command command = _redoStack.Pop();
-        command.Execute();
+        command.Redo();
         _undoStack.Push(command);
-        Console.WriteLine("Redo");
     }
 }

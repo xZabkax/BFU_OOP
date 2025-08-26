@@ -2,13 +2,14 @@
 
 public class MediaPlayer : IOriginator
 {
-    public bool IsLaunched;
+    private static MediaPlayer _instance;
+    public bool IsLaunched { get;  private set; }
     private byte _volumeLevel = 40;
 
     public byte VolumeLevel
     {
         get => _volumeLevel;
-        set
+        private set
         {
             if (value > 100)
                 _volumeLevel = 100;
@@ -18,27 +19,52 @@ public class MediaPlayer : IOriginator
                 _volumeLevel = value;
         }
     }
-    
+
+    private MediaPlayer()
+    {
+    }
+
+    public static MediaPlayer GetInstance()
+    {
+        return _instance ?? new MediaPlayer();
+    }
+
     public void Launch()
     {
+        IsLaunched = true;
         OutputManager.Write("Media player launched");
     }
 
     public void Close()
     {
+        IsLaunched = false;
         OutputManager.Write("Media player closed");
     }
 
     public void VolumeUp()
     {
-        VolumeLevel += 20;
-        OutputManager.Write($"Volume increased +20% (Volume: {VolumeLevel})");
+        if (!IsLaunched)
+        {
+            OutputManager.Write("To change the volume level, you must first launch the media player.");
+        }
+        else
+        {
+            VolumeLevel += 20;
+            OutputManager.Write($"Volume increased +20% (Volume: {VolumeLevel})");
+        }
     }
 
     public void VolumeDown()
     {
-        VolumeLevel -= 20;
-        OutputManager.Write($"Volume decreased -20% (Volume: {VolumeLevel})");
+        if (!IsLaunched)
+        {
+            OutputManager.Write("To change the volume level, you must first launch the media player.");
+        }
+        else
+        {
+            VolumeLevel -= 20;
+            OutputManager.Write($"Volume decreased -20% (Volume: {VolumeLevel})");
+        }
     }
 
     public IMemento SaveState()

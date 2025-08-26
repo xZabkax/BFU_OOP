@@ -1,9 +1,10 @@
 ﻿namespace Lab_6;
 
-public class MediaPlayerCommand : Command
+public class MediaPlayerCloseCommand : Command
 {
     private readonly MediaPlayer _mediaPlayer;
-    public MediaPlayerCommand(MediaPlayer mediaPlayer) : base(mediaPlayer)
+
+    public MediaPlayerCloseCommand(MediaPlayer mediaPlayer) : base(mediaPlayer)
     {
         _mediaPlayer = mediaPlayer;
     }
@@ -11,18 +12,17 @@ public class MediaPlayerCommand : Command
     public override void Execute()
     {
         SaveBackup();
-        _mediaPlayer.Launch();
+        _mediaPlayer.Close();
     }
 
     public override void Redo()
     {
-        _mediaPlayer.Launch();
+        _mediaPlayer.Close();
     }
 
     public override void Undo()
     {
         base.Undo();
-        _mediaPlayer.Close();
+        _mediaPlayer.Launch();
     }
-    
 }

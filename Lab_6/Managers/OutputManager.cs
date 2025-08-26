@@ -3,7 +3,7 @@
 public class OutputManager
 {
     public string Text { get; set; } = string.Empty;
-    private const string OutputFilePath = @"res\output.txt";
+    public const string OutputFilePath = @"res\output.txt";
 
     static OutputManager()
     {
@@ -57,4 +57,6 @@ public class OutputManager
             throw;
         }
     }
+
+    public string GetPath() => OutputFilePath;
 }

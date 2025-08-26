@@ -61,7 +61,7 @@ public static class KeyboardStateSaver
     private static Dictionary<string, Command> RestoreCommands(Keyboard keyboard, Dictionary<string, string> dict)
     {
         var bindings = new Dictionary<string, Command>();
-        var mediaPlayer = new MediaPlayer();
+        var mediaPlayer = MediaPlayer.GetInstance();
         foreach (var item in dict)
         {
             switch (item.Value)
@@ -69,8 +69,11 @@ public static class KeyboardStateSaver
                 case nameof(PrintCharCommand):
                     bindings.Add(item.Key, new PrintCharCommand(keyboard, item.Key[0]));
                     break;
-                case nameof(MediaPlayerCommand):
-                    bindings.Add(item.Key, new MediaPlayerCommand(mediaPlayer));
+                case nameof(MediaPlayerLaunchCommand):
+                    bindings.Add(item.Key, new MediaPlayerLaunchCommand(mediaPlayer));
+                    break;
+                case nameof(MediaPlayerCloseCommand):
+                    bindings.Add(item.Key, new MediaPlayerCloseCommand(mediaPlayer));
                     break;
                 case nameof(VolumeUpCommand):
                     bindings.Add(item.Key, new VolumeUpCommand(mediaPlayer));

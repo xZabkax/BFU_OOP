@@ -1,27 +1,28 @@
 ﻿namespace Lab_6;
 
-public class VolumeUpCommand : Command
+public class MediaPlayerLaunchCommand : Command
 {
     private readonly MediaPlayer _mediaPlayer;
 
-    public VolumeUpCommand(MediaPlayer mediaPlayer) : base(mediaPlayer)
+    public MediaPlayerLaunchCommand(MediaPlayer mediaPlayer) : base(mediaPlayer)
     {
         _mediaPlayer = mediaPlayer;
     }
-
+    
     public override void Execute()
     {
         SaveBackup();
-        _mediaPlayer.VolumeUp();
+        _mediaPlayer.Launch();
     }
 
     public override void Redo()
     {
-        _mediaPlayer.VolumeUp();
+        _mediaPlayer.Launch();
     }
 
     public override void Undo()
     {
-        _mediaPlayer.VolumeDown();
+        base.Undo();
+        _mediaPlayer.Close();
     }
 }
