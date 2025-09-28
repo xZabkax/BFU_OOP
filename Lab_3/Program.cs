@@ -1,5 +1,20 @@
 ﻿using Lab_3;
 
+try
+{
+    var dir = new DirectoryInfo(Directory.GetCurrentDirectory());
+    Directory.SetCurrentDirectory(dir.Parent.Parent.Parent.FullName);
+}
+catch
+{
+    Console.WriteLine("Couldn't set a new working directory");
+    throw;
+}
+finally
+{
+    Console.WriteLine("Current working directory: " + Directory.GetCurrentDirectory() +  "\n");
+}
+
 var filters = new List<ILogFilter>
 {
     new SimpleLogFilter("ERROR"),
