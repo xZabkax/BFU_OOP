@@ -2,17 +2,17 @@
 
 public class Vector
     {
-        public int x { get; private set; }
-        public int y { get; private set; }
+        public int X { get; private set; }
+        public int Y { get; private set; }
         
-        public Vector(int X=0, int Y=0)
+        public Vector(int x, int y)
         {
-            x = X;
-            y = Y;
+            X = x;
+            Y = y;
         }
         
         // Конструктор через точки (вызывает основной конструктор)
-        public Vector(Point start, Point end) : this(end.x - start.x, end.y - start.y) // Цепочка вызовов
+        public Vector(Point start, Point end) : this(end.X - start.X, end.Y - start.Y) // Цепочка вызовов
         {
         }
 
@@ -22,8 +22,8 @@ public class Vector
             {
                 switch (index)
                 {
-                    case 0: return x;
-                    case 1: return y;
+                    case 0: return X;
+                    case 1: return Y;
                     default: throw new IndexOutOfRangeException("Индекс может быть 0 или 1");
                 }
             }
@@ -31,8 +31,8 @@ public class Vector
             {
                 switch (index)
                 {
-                    case 0: x = value; break;
-                    case 1: y = value; break;
+                    case 0: X = value; break;
+                    case 1: Y = value; break;
                     default: throw new IndexOutOfRangeException("Индекс может быть 0 или 1");
                             
                 }
@@ -42,43 +42,43 @@ public class Vector
         // Итерация вектора
         public IEnumerator<int> GetEnumerator()
         {
-            yield return x;
-            yield return y;
+            yield return X;
+            yield return Y;
         }
         
         // Строковое представление вектора
         public override string ToString()
         {
-            return $"Vector2D({x}, {y})";
+            return $"Vector2D({X}, {Y})";
         }
         
         // Модуль вектора (abs)
         public double GetLength()
         {
-            return Math.Sqrt(x*x + y*y);
+            return Math.Sqrt(X*X + Y*Y);
         }
         
         // Сложение векторов
         public static Vector operator +(Vector vectorA, Vector vectorB)
         {
-            return new Vector(vectorA.x + vectorB.x, vectorA.y + vectorB.y);
+            return new Vector(vectorA.X + vectorB.X, vectorA.Y + vectorB.Y);
         } 
         
         // Вычитание векторов
         public static Vector operator -(Vector vectorA, Vector vectorB)
         {
-            return new Vector(vectorA.x - vectorB.x, vectorA.y - vectorB.y);
+            return new Vector(vectorA.X - vectorB.X, vectorA.Y - vectorB.Y);
         }
        
         // Умножение вектора на число
         public static Vector operator *(Vector vector, int number)
         {
-            return new Vector(vector.x * number, vector.y * number);
+            return new Vector(vector.X * number, vector.Y * number);
         }
         
         public static Vector operator *(int number, Vector vector)
         {
-            return new Vector(vector.x * number, vector.y * number);
+            return new Vector(vector.X * number, vector.Y * number);
         }
         
         // Деление вектора на число
@@ -86,45 +86,45 @@ public class Vector
         {
             if (number == 0)
                 throw new DivideByZeroException();
-            return new Vector(vector.x / number , vector.y / number);
+            return new Vector(vector.X / number , vector.Y / number);
         }
         
         // Сравнение векторов на эквивалентность
         public static bool operator ==(Vector vectorA, Vector vectorB)
         {
-            return vectorA.x == vectorB.x && vectorA.y == vectorB.y;
+            return vectorA.X == vectorB.X && vectorA.Y == vectorB.Y;
         }
         
         public static bool operator !=(Vector vectorA, Vector vectorB)
         {
-            return vectorA.x != vectorB.x || vectorA.y != vectorB.y;
+            return vectorA.X != vectorB.X || vectorA.Y != vectorB.Y;
         }
         
-        // Скалярное умножение векторов
+        // Скалярное произведение векторов
         public static int operator *(Vector vectorA, Vector vectorB)
         {
-            return vectorA.x * vectorB.x + vectorA.y * vectorB.y;
+            return vectorA.X * vectorB.X + vectorA.Y * vectorB.Y;
         }
 
         public static int ScalarProduct(Vector vectorA, Vector vectorB)
         {
-            return vectorA.x * vectorB.x + vectorA.y * vectorB.y;
+            return vectorA.X * vectorB.X + vectorA.Y * vectorB.Y;
         }
         
         public int ScalarProduct(Vector otherVector)
         {
-            return x * otherVector.x + y * otherVector.y;
+            return X * otherVector.X + Y * otherVector.Y;
         }
         
         // Векторное произведение векторов (Возвращает значение z координаты результирующего вектора)
         public static int VectorProduct(Vector vectorA, Vector vectorB)
         {
-            return vectorA.x * vectorB.y - vectorA.y * vectorB.x;
+            return vectorA.X * vectorB.Y - vectorA.Y * vectorB.X;
         }
 
         public int VectorProduct(Vector otherVector)
         {
-            return x * otherVector.y - y * otherVector.x;
+            return X * otherVector.Y - Y * otherVector.X;
         }
         
         // Смешанное произведение векторов

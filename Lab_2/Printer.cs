@@ -13,6 +13,7 @@ public class Printer : IDisposable
 
     private int _savedCursorLeft;
     private int _savedCursorTop;
+    private int _counterOfStrings = 0; //Счётчик строк для последовательного вывода при using
 
     private bool _disposed;
 
@@ -58,16 +59,7 @@ public class Printer : IDisposable
 
     public void Print(string text)
     {
-
-        (int, int) position = default;
-
-        if (_position == default)
-        {
-            position = (Console.CursorLeft, Console.CursorTop);
-        }
-        
-        Print(text, color: _color, position: position, symbol: _symbol);
-        
+        Print(text, position: _position, color: _color, symbol: _symbol);
     }
 
     private static Dictionary<char, List<string>> LoadFont(string fontFilePath = @".\resources\font.txt")

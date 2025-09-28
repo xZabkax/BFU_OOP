@@ -2,34 +2,52 @@
 
 public class Point
 {
-    public int x { get; set; }
-    public int y { get; set; }
+    private int _x;
+    private int _y;
 
-    public Point(int X=0, int Y=0)
+    public int X
     {
-        const int WIDTH = 1920;
-        const int HEIGHT = 1080;
+        get => _x;
+        set
+        {
+            if (value < 0 || value > MaxWidth)
+                throw new ArgumentOutOfRangeException($"x должен быть в диапазоне [0, {MaxWidth}]");
+            _x = value;
+        } 
+    }
 
-        if (X < 0 || X > WIDTH)
-            throw new ArgumentOutOfRangeException($"x должен быть в диапазоне [0, {WIDTH}]");
-        if (Y < 0 || Y > HEIGHT)
-            throw new ArgumentOutOfRangeException($"y должен быть в диапазоне [0, {HEIGHT}]");
-        x = X;
-        y = Y;
+    public int Y
+    {
+        get => _y;
+        set
+        { 
+            if (value < 0 || value > MaxHeight)
+                throw new ArgumentOutOfRangeException($"y должен быть в диапазоне [0, {MaxHeight}]");
+            _y = value;
+        } 
+    }
+    
+    private const int MaxWidth = 1920;
+    private const int MaxHeight = 1080;
+    
+    public Point(int x, int y)
+    {
+        X = x;
+        Y = y;
     }
         
     public static bool operator ==(Point pointA, Point pointB)
     {
-        return pointA.x == pointB.x & pointA.y == pointB.y;
+        return pointA.X == pointB.X && pointA.Y == pointB.Y;
     }
         
     public static bool operator !=(Point pointA, Point pointB)
     {
-        return pointA.x != pointB.y || pointA.y != pointB.y;
+        return pointA.X != pointB.X || pointA.Y != pointB.Y;
     }
         
     public override string ToString()
     {
-        return $"Point2D({x}, {y})";
+        return $"Point2D({X}, {Y})";
     }
 }

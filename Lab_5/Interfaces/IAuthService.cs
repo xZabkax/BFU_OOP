@@ -3,7 +3,7 @@
 public interface IAuthService
 {
     void SignIn(User user);
-    void SignOut(User user);
-    protected bool IsAuthorized { get; }
-    protected User? CurrentUser { get; }
+    void SignOut();
+    bool IsAuthorized { get; }
+    User? CurrentUser { get; }
 }

@@ -1,0 +1,15 @@
+C:\Users\perva\RiderProjects\BFU_OOP\Lab_7\bin\Debug\net8.0\Lab_7.exe
+C:\Users\perva\RiderProjects\BFU_OOP\Lab_7\bin\Debug\net8.0\Lab_7.deps.json
+C:\Users\perva\RiderProjects\BFU_OOP\Lab_7\bin\Debug\net8.0\Lab_7.runtimeconfig.json
+C:\Users\perva\RiderProjects\BFU_OOP\Lab_7\bin\Debug\net8.0\Lab_7.dll
+C:\Users\perva\RiderProjects\BFU_OOP\Lab_7\bin\Debug\net8.0\Lab_7.pdb
+C:\Users\perva\RiderProjects\BFU_OOP\Lab_7\obj\Debug\net8.0\Lab_7.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\perva\RiderProjects\BFU_OOP\Lab_7\obj\Debug\net8.0\Lab_7.AssemblyInfoInputs.cache
+C:\Users\perva\RiderProjects\BFU_OOP\Lab_7\obj\Debug\net8.0\Lab_7.AssemblyInfo.cs
+C:\Users\perva\RiderProjects\BFU_OOP\Lab_7\obj\Debug\net8.0\Lab_7.csproj.CoreCompileInputs.cache
+C:\Users\perva\RiderProjects\BFU_OOP\Lab_7\obj\Debug\net8.0\Lab_7.sourcelink.json
+C:\Users\perva\RiderProjects\BFU_OOP\Lab_7\obj\Debug\net8.0\Lab_7.dll
+C:\Users\perva\RiderProjects\BFU_OOP\Lab_7\obj\Debug\net8.0\refint\Lab_7.dll
+C:\Users\perva\RiderProjects\BFU_OOP\Lab_7\obj\Debug\net8.0\Lab_7.pdb
+C:\Users\perva\RiderProjects\BFU_OOP\Lab_7\obj\Debug\net8.0\Lab_7.genruntimeconfig.cache
+C:\Users\perva\RiderProjects\BFU_OOP\Lab_7\obj\Debug\net8.0\ref\Lab_7.dll

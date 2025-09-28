@@ -2,5 +2,5 @@
 
 public interface IInterface3
 {
-    
+    void Execute();
 }

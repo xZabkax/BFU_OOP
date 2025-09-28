@@ -2,7 +2,7 @@
 
 public abstract class Command
 {
-    protected IOriginator _originator;
+    private readonly IOriginator _originator;
     private IMemento _memento;
     
     protected Command(IOriginator originator)

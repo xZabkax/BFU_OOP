@@ -1,14 +1,13 @@
-﻿using System.Collections;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace Lab_5;
 
 public record User : IComparable<User>
 {
-    public required int Id { get; init; }
-    public required string Name { get; set; }
-    public required string Login { get; init; }
-    [JsonIgnore] public required string Password { get; set; }
+    public int Id { get; init; }
+    public string Name { get; set; }
+    public string Login { get; init; }
+    [JsonIgnore] public string Password { get; set; }
     public string? Email { get; set; }
     public string? Address { get; set; }
 
@@ -19,6 +18,6 @@ public record User : IComparable<User>
 
     public override string ToString()
     {
-        return $"User(Id: {Id}, Name: {Name}, Login: {Login}, Email: {Email ?? "N/A"}, Address: {Address ?? "N/A"}";
+        return $"User(Id: {Id}, Name: {Name}, Login: {Login}, Email: {Email ?? "N/A"}, Address: {Address ?? "N/A"})";
     }
 }

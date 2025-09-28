@@ -18,7 +18,7 @@ finally
 var keyboard = new Keyboard();
 var mediaPlayer = MediaPlayer.GetInstance();
 
-var alphabet = new string(Enumerable.Range('a', 'z' - 'a' + 1).Select(c => (char)c).ToArray());
+/*var alphabet = new string(Enumerable.Range('a', 'z' - 'a' + 1).Select(c => (char)c).ToArray());
 
 foreach (var letter in alphabet)
 {     
@@ -28,7 +28,7 @@ foreach (var letter in alphabet)
 keyboard.AddKeyBinding("ctrl++", new VolumeUpCommand(mediaPlayer));
 keyboard.AddKeyBinding("ctrl+-", new VolumeDownCommand(mediaPlayer));
 keyboard.AddKeyBinding("ctrl+p", new MediaPlayerLaunchCommand(mediaPlayer));
-keyboard.AddKeyBinding("ctrl+o", new MediaPlayerCloseCommand(mediaPlayer));
+keyboard.AddKeyBinding("ctrl+o", new MediaPlayerCloseCommand(mediaPlayer));*/
 
 const string stopWord = "stop", undoWord = "undo", redoWord = "redo";
 
