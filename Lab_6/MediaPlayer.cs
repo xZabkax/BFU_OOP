@@ -26,7 +26,7 @@ public class MediaPlayer : IOriginator
 
     public static MediaPlayer GetInstance()
     {
-        return _instance ?? new MediaPlayer();
+        return _instance ??= new MediaPlayer();
     }
 
     public void Launch()

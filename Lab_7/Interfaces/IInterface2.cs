@@ -2,5 +2,5 @@
 
 public interface IInterface2
 {
-    void Run();
+    void Execute2();
 }

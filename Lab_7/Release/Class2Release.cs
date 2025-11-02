@@ -2,7 +2,7 @@
 
 public class Class2Release : IInterface2
 {
-    public void Run()
+    public void Execute2()
     {
         Console.WriteLine("Class2Release running");
     }

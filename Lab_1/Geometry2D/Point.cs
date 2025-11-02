@@ -4,6 +4,9 @@ public class Point
 {
     private int _x;
     private int _y;
+    
+    public static readonly int MaxWidth = 1920;
+    public static readonly int MaxHeight = 1080;
 
     public int X
     {
@@ -11,7 +14,8 @@ public class Point
         set
         {
             if (value < 0 || value > MaxWidth)
-                throw new ArgumentOutOfRangeException($"x должен быть в диапазоне [0, {MaxWidth}]");
+                throw new ArgumentOutOfRangeException(
+                    nameof(value),$"x должен быть в диапазоне [0, {MaxWidth}]");
             _x = value;
         } 
     }
@@ -22,28 +26,42 @@ public class Point
         set
         { 
             if (value < 0 || value > MaxHeight)
-                throw new ArgumentOutOfRangeException($"y должен быть в диапазоне [0, {MaxHeight}]");
+                throw new ArgumentOutOfRangeException(
+                    nameof(value), $"y должен быть в диапазоне [0, {MaxHeight}]");
             _y = value;
         } 
     }
-    
-    private const int MaxWidth = 1920;
-    private const int MaxHeight = 1080;
     
     public Point(int x, int y)
     {
         X = x;
         Y = y;
     }
-        
+
+    public override bool Equals(object obj)
+    {
+        if (obj is null) return false;
+        if (ReferenceEquals(this, obj)) return true;
+        if (obj.GetType() != this.GetType()) return false;
+
+        var other = (Point) obj;
+        return (this.X == other.X) && (this.Y == other.Y);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(_x, _y);
+    }
+
     public static bool operator ==(Point pointA, Point pointB)
     {
-        return pointA.X == pointB.X && pointA.Y == pointB.Y;
+        if (pointA is null) return pointB is null;
+        return pointA.Equals(pointB);
     }
         
     public static bool operator !=(Point pointA, Point pointB)
     {
-        return pointA.X != pointB.X || pointA.Y != pointB.Y;
+        return !(pointA == pointB);
     }
         
     public override string ToString()

@@ -1,21 +1,38 @@
-﻿using System.Threading.Tasks;
-namespace Lab_3;
+﻿namespace Lab_3;
 
-public class Logger(
-    IEnumerable<ILogFilter> filters,
-    IEnumerable<ILogHandler> handlers
-    )
+public class Logger
 {
+    private readonly List<ILogFilter> _filters;
+    private readonly List<ILogHandler> _handlers;
+
+    public Logger(List<ILogFilter> filters, List<ILogHandler> handlers)
+    {
+        _filters = filters ?? new List<ILogFilter>();
+        _handlers = handlers ?? new List<ILogHandler>();
+    }
+    
     public void Log(string text)
     {
-        foreach (var filter in filters)
+        if (string.IsNullOrEmpty(text))
+            return;
+        
+        foreach (var filter in _filters)
         {
             if(!filter.IsMatch(text)) return; // Сообщение не прошло фильтр
         }
 
-        foreach (var handler in handlers)
+        foreach (var handler in _handlers)
         {
-            handler.Handle(text);
+            try
+            {
+                handler.Handle(text);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Handler error: {e.Message}");
+                throw;
+            }
+            
         }
     }
 }   

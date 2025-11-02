@@ -31,8 +31,11 @@ var handlers = new List<ILogHandler>
 
 var logger = new Logger(filters, handlers);
 
+Console.WriteLine("=== Демонстрация системы логирования ===\n");
+
 logger.Log("ERROR 404: Ресурс не найден [123-4567]");
 logger.Log("WARNING: Незначительная проблема");
+logger.Log("ATTENTION: Другая незначительная проблема");
 logger.Log("ERROR 500: Внутренняя ошибка сервера [890-1234]");
 
 Console.WriteLine("\nЛогирование завершено. Проверьте файл log.txt");

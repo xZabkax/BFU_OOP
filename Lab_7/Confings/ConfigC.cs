@@ -8,9 +8,10 @@ public static class ConfigC
         injector.Register<IInterface2>(() =>
         {
             Class2Release impl = new();
-            impl.Run();
+            impl.Execute2();
             return impl;
-        });
-        injector.Register<IInterface3, Class3NonEmpty>(LifeStyle.PerRequest, parameters: new() { { "message", "TEST" } } );
+        },
+            LifeStyle.Scoped);
+        injector.Register<IInterface3, Class3Release>(LifeStyle.PerRequest, parameters: new() { { "attribute1", "TEST" } } );
     }
 }

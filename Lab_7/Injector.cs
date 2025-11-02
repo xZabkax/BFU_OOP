@@ -2,92 +2,152 @@
 
 public class Injector
 {
-    private class Registration
-    {
-        public Func<object> Factory;
-        public LifeStyle LifeStyle;
-        public object SingletonInstance;
-        public Dictionary<string, object> Parameters;
-    }
-
     private readonly Dictionary<Type, Registration> _registrations = new();
+    private readonly Dictionary<Type, object> _singletons = new();
     private readonly Stack<Scope> _scopes = new();
 
     public void Register<TInterface, TClass>(LifeStyle lifeStyle, Dictionary<string, object> parameters = null)
         where TClass : TInterface
     {
-        _registrations[typeof(TInterface)] = new Registration
-        {
-            Factory = () => CreateInstance(typeof(TClass), parameters),
-            LifeStyle = lifeStyle,
-            Parameters = parameters
-        };
+        _registrations[typeof(TInterface)] = new Registration(
+            factory: () => CreateInstance(typeof(TClass), parameters),
+            lifeStyle: lifeStyle
+            );
     }
 
-    public void Register<TInterface>(Func<object> factoryMethod)
+    public void Register<TInterface>(Func<object> factory, LifeStyle lifeStyle)
     {
-        _registrations[typeof(TInterface)] = new Registration
-        {
-            Factory = factoryMethod,
-            LifeStyle = LifeStyle.PerRequest
-        };
+        _registrations[typeof(TInterface)] = new Registration(
+            factory,
+            lifeStyle);
     }
 
-    private object CreateInstance(Type type, Dictionary<string, object> parameters)
+    public TInterface GetInstance<TInterface>() where TInterface : class
     {
-        var ctor = type.GetConstructors().First();
-        var args = ctor.GetParameters().Select(p =>
-        {
-            if (parameters != null && parameters.TryGetValue(p.Name, out var val))
-                return val;
-            return GetInstance(p.ParameterType);
-        }).ToArray();
-
-        return Activator.CreateInstance(type, args);
+        return (TInterface)GetInstance(typeof(TInterface));
     }
 
     public object GetInstance(Type interfaceType)
     {
-        if (!_registrations.TryGetValue(interfaceType, out var reg))
-            throw new InvalidOperationException($"Type {interfaceType} not registered.");
-
-        return reg.LifeStyle switch
+        if (!_registrations.TryGetValue(interfaceType, out var registration))
         {
-            LifeStyle.Singleton => reg.SingletonInstance ??= reg.Factory(),
-            LifeStyle.Scoped when _scopes.Any() =>
-                _scopes.Peek().ScopedInstances.TryGetValue(interfaceType, out var inst)
-                ? inst
-                : (_scopes.Peek().ScopedInstances[interfaceType] = reg.Factory()),
-            _ => reg.Factory()
-        };
+            throw new ArgumentException($"Type {interfaceType} not registered.");
+        }
+        
+        object instance;
+        switch (registration.LifeStyle)
+        {
+            case LifeStyle.Scoped:
+                if (_scopes.Any())
+                {
+                    var scope = _scopes.Peek();
+                    if (!scope.Instances.TryGetValue(interfaceType, out object? scopeInstance))
+                    {
+                        scopeInstance = registration.Factory.Invoke();
+                        scope.Instances[interfaceType] = scopeInstance;
+                    }
+
+                    instance = scopeInstance;
+                    break;
+                }
+                instance = registration.Factory.Invoke();
+                break;
+            case LifeStyle.Singleton:
+                if (!_singletons.TryGetValue(interfaceType, out object? value))
+                {
+                    value = registration.Factory.Invoke();
+                    _singletons[interfaceType] = value;
+                }
+                instance = value;
+                break;
+            case LifeStyle.PerRequest:
+            default:
+                instance = registration.Factory.Invoke();
+                break;
+                
+        }
+        return instance;
     }
 
-    public T GetInstance<T>() => (T)GetInstance(typeof(T));
-
-    internal void PushScope(Scope scope) => _scopes.Push(scope);
-    internal void PopScope() => _scopes.Pop();
-}
-
-public enum LifeStyle
-{
-    PerRequest,
-    Scoped,
-    Singleton
-}
-
-public class Scope : IDisposable
-{
-    private readonly Injector _injector;
-    internal Dictionary<Type, object> ScopedInstances = new();
-
-    public Scope(Injector injector)
+    private object CreateInstance(Type classType, Dictionary<string, object> parameters)
     {
-        _injector = injector;
-        _injector.PushScope(this);
+        var constructors = classType.GetConstructors();
+        foreach (var constructor in constructors)
+        {
+            var parameterInfos = constructor.GetParameters();
+            if (parameterInfos.Length == 0)
+            {
+                var incomingParametersCount = parameters?.Count ?? 0;
+                
+                if (incomingParametersCount > 0)
+                {
+                    continue;
+                }
+                if (incomingParametersCount == 0)
+                {
+                    return Activator.CreateInstance(classType);
+                }
+            }
+            
+            var args = new List<object>();
+            bool suitable = true;
+            
+            foreach (var parameterInfo in parameterInfos)
+            {
+                if (parameters != null && parameters.TryGetValue(parameterInfo.Name, out var val))
+                {
+                    args.Add(val);
+                }
+                else if (_registrations.ContainsKey(parameterInfo.ParameterType))
+                {
+                    args.Add(GetInstance(parameterInfo.ParameterType));
+                }
+                else if (!parameterInfo.IsOptional)
+                {
+                    suitable = false;
+                    break;
+                }
+            }
+
+            if (!suitable)
+            {
+                continue;
+            }
+
+            if (args.Count > 0)
+            {
+                return Activator.CreateInstance(classType, args.ToArray()); //Рефлексия
+            }
+            else
+            {
+                return Activator.CreateInstance(classType);
+            }
+            
+        }
+
+        throw new ArgumentException($"Failed to create instance of type {classType}: inappropriate parameters");
     }
 
-    public void Dispose()
+    public void PushScope(Scope scope)
     {
-        _injector.PopScope();
+        _scopes.Push(scope);
+    }
+
+    public void PopScope()
+    {
+        _scopes.Pop();
+    }
+    
+    private record Registration
+    {
+        public Type ClassType { get; }
+        public LifeStyle LifeStyle { get; }
+        public Func<object> Factory { get; }
+
+        public Registration(Func<object> factory, LifeStyle lifeStyle)
+        {
+            Factory = factory;
+            LifeStyle = lifeStyle;
+        }
     }
 }

@@ -2,5 +2,5 @@
 
 public interface IInterface1
 {
-    void DoSomething();
+    void Execute1();
 }

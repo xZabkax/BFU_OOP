@@ -13,7 +13,8 @@ public static class KeyboardStateSaver
         try
         {
             var bindings = (Keyboard.Memento)keyboard.SaveState();
-            var bindingsToSave = bindings.GetBindings()
+            var bindingsToSave = bindings
+                .GetBindings()
                 .Select(item => new KeyValuePair<string, string>(item.Key, item.Value.GetType().Name))
                 .ToDictionary();
             var json = JsonSerializer.Serialize(bindingsToSave);
@@ -61,7 +62,6 @@ public static class KeyboardStateSaver
     private static Dictionary<string, Command> RestoreCommands(Keyboard keyboard, Dictionary<string, string> dict)
     {
         var bindings = new Dictionary<string, Command>();
-        var mediaPlayer = MediaPlayer.GetInstance();
         foreach (var item in dict)
         {
             switch (item.Value)
@@ -70,16 +70,16 @@ public static class KeyboardStateSaver
                     bindings.Add(item.Key, new PrintCharCommand(keyboard, item.Key[0]));
                     break;
                 case nameof(MediaPlayerLaunchCommand):
-                    bindings.Add(item.Key, new MediaPlayerLaunchCommand(mediaPlayer));
+                    bindings.Add(item.Key, new MediaPlayerLaunchCommand());
                     break;
                 case nameof(MediaPlayerCloseCommand):
-                    bindings.Add(item.Key, new MediaPlayerCloseCommand(mediaPlayer));
+                    bindings.Add(item.Key, new MediaPlayerCloseCommand());
                     break;
                 case nameof(VolumeUpCommand):
-                    bindings.Add(item.Key, new VolumeUpCommand(mediaPlayer));
+                    bindings.Add(item.Key, new VolumeUpCommand());
                     break;
                 case nameof(VolumeDownCommand):
-                    bindings.Add(item.Key, new VolumeDownCommand(mediaPlayer));
+                    bindings.Add(item.Key, new VolumeDownCommand());
                     break;
             }
         }

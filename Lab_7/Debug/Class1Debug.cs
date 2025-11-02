@@ -2,7 +2,7 @@
 
 public class Class1Debug : IInterface1
 {
-    public void DoSomething()
+    public void Execute1()
     {
         Console.WriteLine("Class1Debug doing something");
     }

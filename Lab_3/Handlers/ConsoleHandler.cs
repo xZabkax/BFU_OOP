@@ -2,5 +2,8 @@
 
 public class ConsoleHandler : ILogHandler
 {
-    public void Handle(string text) => Console.WriteLine($"[CONSOLE] {DateTime.Now} {text}");
+    public void Handle(string text)
+    {
+        Console.WriteLine($"[CONSOLE] {DateTime.Now} {text}");
+    }
 }

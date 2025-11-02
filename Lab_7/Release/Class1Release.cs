@@ -2,7 +2,7 @@
 
 public class Class1Release : IInterface1
 {
-    public void DoSomething() 
+    public void Execute1() 
     {
         Console.WriteLine("Class1Release doing something");
     }

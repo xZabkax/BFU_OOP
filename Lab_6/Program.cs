@@ -16,23 +16,23 @@ finally
 }
 
 var keyboard = new Keyboard();
-var mediaPlayer = MediaPlayer.GetInstance();
 
-/*var alphabet = new string(Enumerable.Range('a', 'z' - 'a' + 1).Select(c => (char)c).ToArray());
+var alphabet = new string(Enumerable.Range('a', 'z' - 'a' + 1).Select(c => (char)c).ToArray());
 
 foreach (var letter in alphabet)
 {     
     keyboard.AddKeyBinding(letter.ToString(), new PrintCharCommand(keyboard, letter));
 }
 
-keyboard.AddKeyBinding("ctrl++", new VolumeUpCommand(mediaPlayer));
-keyboard.AddKeyBinding("ctrl+-", new VolumeDownCommand(mediaPlayer));
-keyboard.AddKeyBinding("ctrl+p", new MediaPlayerLaunchCommand(mediaPlayer));
-keyboard.AddKeyBinding("ctrl+o", new MediaPlayerCloseCommand(mediaPlayer));*/
+keyboard.AddKeyBinding("ctrl++", new VolumeUpCommand());
+keyboard.AddKeyBinding("ctrl+-", new VolumeDownCommand());
+keyboard.AddKeyBinding("ctrl+p", new MediaPlayerLaunchCommand());
+keyboard.AddKeyBinding("ctrl+o", new MediaPlayerCloseCommand());
 
 const string stopWord = "stop", undoWord = "undo", redoWord = "redo";
 
-Console.WriteLine($"\nVirtual keyboard launched. To see the results check \"{keyboard.Output.GetPath()}\"\nEnter \"{stopWord}\" to close program");
+Console.WriteLine($"\nVirtual keyboard is running. To see the results check \"{keyboard.Output.GetPath()}\"\n" +
+                  $"Enter \"{stopWord}\" to close program, \"{undoWord}\" to undo and \"{redoWord}\" to redo");
 while (true)
 {
     var input = Console.ReadLine();
@@ -40,7 +40,8 @@ while (true)
     switch (input)
     {
         case stopWord:
-            goto SaveAndExit;
+            KeyboardStateSaver.Save(keyboard);
+            return;
         case undoWord:
             keyboard.Undo();
             break;
@@ -52,9 +53,6 @@ while (true)
             break;
     }
 }
-
-SaveAndExit:
-    KeyboardStateSaver.Save(keyboard);
 
 
 

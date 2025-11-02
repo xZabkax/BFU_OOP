@@ -4,9 +4,9 @@ public class VolumeDownCommand : Command
 {
     private readonly MediaPlayer _mediaPlayer;
 
-    public VolumeDownCommand(MediaPlayer mediaPlayer) : base(mediaPlayer)
+    public VolumeDownCommand() : base(MediaPlayer.GetInstance())
     {
-        _mediaPlayer = mediaPlayer;
+        _mediaPlayer = MediaPlayer.GetInstance();
     }
 
     public override void Execute()

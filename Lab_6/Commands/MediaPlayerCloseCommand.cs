@@ -4,9 +4,9 @@ public class MediaPlayerCloseCommand : Command
 {
     private readonly MediaPlayer _mediaPlayer;
 
-    public MediaPlayerCloseCommand(MediaPlayer mediaPlayer) : base(mediaPlayer)
+    public MediaPlayerCloseCommand() : base(MediaPlayer.GetInstance())
     {
-        _mediaPlayer = mediaPlayer;
+        _mediaPlayer = MediaPlayer.GetInstance();
     }
     
     public override void Execute()

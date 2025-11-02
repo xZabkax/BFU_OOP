@@ -4,110 +4,151 @@ namespace Lab_2;
 
 public class Printer : IDisposable
 {
-    private readonly Color _color;
-    private readonly (int, int) _position;
-    private readonly char _symbol;
-    private static readonly Dictionary<char, List<string>> _font = LoadFont();
-    private static readonly int _fontHeight = _font.Values.First().Count;         // Полагаем, что высота и ширина
-    private static readonly int _fontWidth = _font.Values.First().First().Length; // одна и та же для каждого символа
+    private static Dictionary<char, string[]> _font;
+    
+    private Color _color;
+    private (int x, int y) _position;
+    private char _symbol;
+    
+    private static readonly char _defaultSymbol = '*';
+    private static readonly Color _defaultColor = Color.White;
+    private static int _fontSize;
 
-    private int _savedCursorLeft;
-    private int _savedCursorTop;
-    private int _counterOfStrings = 0; //Счётчик строк для последовательного вывода при using
-
-    private bool _disposed;
-
-    public Printer(Color color = Color.White, (int, int) position = default, char symbol = '*')
+    static Printer()
     {
-        _color = color;
-        _position = position;
-        _symbol = symbol;
+        LoadFont();
     }
 
-    public static void Print(string text, (int Left, int Top) position = default, Color color = Color.White, char symbol = '*')
+    public Printer(Color color = Color.White, (int x, int y) position = default, char symbol = '*')
     {
-        if (!ValidateText(text, _font))
-        {
-            throw new Exception("Incorrect input");
-        }
+        var scaledPosition = (position.x * (_fontSize + 1), position.y * (_fontSize + 1));
         
-        text = text.ToUpper();
-        
-        Console.SetCursorPosition(position.Left * (_fontWidth+1), position.Top * _fontHeight);
-        
-        foreach (var letter in text)
-        {
-            for (int i = 0; i < _fontHeight; i++)
-            {
-                var output = $"\u001b[0;{(int)color}m{_font[letter][i]}\u001b[0m";
-                if (symbol != '*')
-                {
-                    output = output.Replace('*', symbol);
-                }
-                Console.Write(output);
-                Console.CursorTop += 1;
-                Console.CursorLeft -= _fontWidth;
-            }
-
-            Console.CursorLeft += _fontWidth + 1;
-            Console.CursorTop -= _fontHeight;
-        }
-
-        Console.CursorLeft = 0;
-        Console.CursorTop += _fontHeight;
+        _color = color;
+        _position = scaledPosition;
+        _symbol = symbol;
     }
 
     public void Print(string text)
     {
-        Print(text, position: _position, color: _color, symbol: _symbol);
+        SetColor(_color);
+        Console.SetCursorPosition(_position.x, _position.y);
+        PrintLine(text, _symbol);
+    }
+    
+    public static void Print(string text, Color color = Color.White, (int x, int y) position = default, char symbol = '*')
+    {
+        using (var printer = new Printer(color, position, symbol))
+        {
+            printer.Print(text);
+        }
     }
 
-    private static Dictionary<char, List<string>> LoadFont(string fontFilePath = @".\resources\font.txt")
+    private static void LoadFont(string fontFilePath = @".\resources\font_size_5.txt")
     {
-        var fontDict = new Dictionary<char, List<string>>();
+        _font = new Dictionary<char, string[]>();
+
+        if (!File.Exists(fontFilePath))
+            throw new FileNotFoundException($"Font file \"{fontFilePath}\" not found");
         
         // Заполняем словарь псевдошрифтом
         using (StreamReader reader = File.OpenText(fontFilePath))
         {
             string line;
             char currentLetter;
+            List<string> letterFromFont = new List<string>();
+
             while ((line = reader.ReadLine()) is not null)
             {
-                if (line.Length == 1 && Char.IsLetter(line[0]))
+                if (line.Length == 1 && char.IsLetter(line[0]))
                 {
                     currentLetter = line[0];
-                    List<string> letterFromFont = new List<string>();
-                    
+                    letterFromFont.Clear();
+
                     while (!string.IsNullOrWhiteSpace(line = reader.ReadLine()))
                     {
                         letterFromFont.Add(line);
                     }
 
-                    fontDict.Add(currentLetter, letterFromFont);
+                    _font.Add(currentLetter, letterFromFont.ToArray());
                 }
             }
+
+            // Отдельно добавляем пробел " " в словарь
+            _fontSize = letterFromFont.Count;
+            letterFromFont.Clear();
+            for (int i = 0; i < _fontSize; i++)
+            {
+                letterFromFont.Add(new StringBuilder(_fontSize).Insert(0, " ", _fontSize).ToString());
+            }
+
+            _font.Add(' ', letterFromFont.ToArray());
         }
-        
-        // Добавляем отдельно пробел " " в словарь
-        var emptySymbol = new List<string>();
-        for (int i = 0; i < 5; i++)
-        {
-            emptySymbol.Add(new StringBuilder(5).Insert(0, " " ,5).ToString());
-        }
-        fontDict.Add(' ', emptySymbol);
-        
-        return fontDict;
     }
 
-    private static bool ValidateText(string text, Dictionary<char, List<string>> font)
+    private static bool ValidateText(string text, Dictionary<char, string[]> font)
     {
         text = text.ToUpper();
         return text.All(c => font.ContainsKey(c));
     }
 
+    private void PrintCharacter(char c, int startX, int startY, char symbol)
+    {
+        var charData = _font[c];
+        for (int i = 0; i < charData.Length; i++)
+        {
+            Console.SetCursorPosition(startX, startY + i);
+            string line = charData[i];
+            if (symbol != _defaultSymbol)
+            {
+                line = line.Replace('*', symbol);
+            }
+            Console.Write(line);
+        }
+    }
+
+    private void PrintLine(string text, char symbol)
+    {
+        if (!ValidateText(text, _font))
+        {
+            throw new Exception("Text contains not supported characters");
+        }
+
+        text = text.ToUpper();
+        
+        var currentY = _position.y;
+
+        foreach (var c in text)
+        {
+            PrintCharacter(c, _position.x, _position.y, symbol);
+            _position.y = currentY;
+            _position.x += _fontSize + 1;
+        }
+        
+        // Переносим курсор на следующую строку, учитывая размерность псевдашрифта.
+        _position.x = 0;
+        _position.y += _fontSize + 1;
+    }
+
+    private void SetColor(Color color)
+    {
+        Console.WriteLine($"\u001b[0;{(int)color}m");
+    }
+
+    private void SetSymbol(char c)
+    {
+        _symbol = c;
+    }
+
+    private void RestoreConsoleState()
+    {
+        SetColor(_defaultColor);
+        SetSymbol(_defaultSymbol);
+        Console.SetCursorPosition(0, 0);
+    }
+
     public void Dispose()
     {
-        GC.SuppressFinalize(this);
+        RestoreConsoleState();
     }
 
     public enum Color

@@ -11,13 +11,14 @@ catch
     throw;
 }
 
-var printer = new Printer(color: Printer.Color.Green, symbol: '$');
+Printer.Print("Static method", Printer.Color.Red);
 
-printer.Print("Text");
-
-
-/*using (Printer printer = new Printer(Printer.Color.Purple, (0, 0), '#'))
+using (var printer = new Printer(Printer.Color.Green, (0, 1), '$'))
 {
-    printer.Print("Text");
-    printer.Print("Test");
-}*/
+    printer.Print("Instance writing");
+    printer.Print("One more time");
+}
+
+Printer.Print("The end", position: (15, 0));
+
+Console.ReadKey();

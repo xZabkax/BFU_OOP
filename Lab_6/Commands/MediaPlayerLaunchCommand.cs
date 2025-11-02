@@ -4,9 +4,9 @@ public class MediaPlayerLaunchCommand : Command
 {
     private readonly MediaPlayer _mediaPlayer;
 
-    public MediaPlayerLaunchCommand(MediaPlayer mediaPlayer) : base(mediaPlayer)
+    public MediaPlayerLaunchCommand() : base(MediaPlayer.GetInstance())
     {
-        _mediaPlayer = mediaPlayer;
+        _mediaPlayer = MediaPlayer.GetInstance();
     }
     
     public override void Execute()

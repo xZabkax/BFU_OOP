@@ -23,10 +23,15 @@ Console.WriteLine($"Вектор B: {vectorB}");
 vectorB[1] = 1;
 Console.WriteLine($"Замена y с -11 на 1: {vectorB}\n");
 
+Console.WriteLine("Демонстрация итерирования вектора A");
+foreach (var coordinate in vectorA)
+{
+    Console.WriteLine($"Координата: {coordinate}");
+}
 
 if (vectorA != vectorB)
 {
-    Console.WriteLine($"Модуль вектора C {vectorC}: {vectorC.GetLength()}\n");
+    Console.WriteLine($"\nМодуль вектора C {vectorC}: {vectorC.GetLength()}\n");
 }
 
 Console.WriteLine($"Демонстрация операторов:\n" +

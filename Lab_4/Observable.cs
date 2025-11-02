@@ -47,7 +47,8 @@ public abstract class Observable<T> : INotifyDataChanged<T>, INotifyDataChanging
 
     public bool NotifyPropertyChanging(T obj, string propertyName, object oldValue, object newValue)
     {
-        return _propertyChangingListeners.All(validator =>
-            validator.OnPropertyChanging(obj, propertyName, oldValue, newValue));
+        return _propertyChangingListeners
+            .All(validator => 
+                 validator.OnPropertyChanging(obj, propertyName, oldValue, newValue));
     }
 }

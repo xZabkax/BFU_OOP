@@ -4,7 +4,7 @@ public class NameValidator : IPropertyChangingListener<User>
 {
     public bool OnPropertyChanging(User obj, string propertyName, object oldValue, object newValue)
     {
-        if (nameof(obj.Name) != propertyName) return true;
+        if (nameof(obj.Name) != propertyName) return true; // Значит observable пытается изменить другое своё поле
         if (newValue is not string name) return false;
         
         if (string.IsNullOrWhiteSpace(name))
