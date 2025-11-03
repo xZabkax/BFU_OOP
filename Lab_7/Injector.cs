@@ -11,8 +11,7 @@ public class Injector
     {
         _registrations[typeof(TInterface)] = new Registration(
             factory: () => CreateInstance(typeof(TClass), parameters),
-            lifeStyle: lifeStyle
-            );
+            lifeStyle: lifeStyle);
     }
 
     public void Register<TInterface>(Func<object> factory, LifeStyle lifeStyle)

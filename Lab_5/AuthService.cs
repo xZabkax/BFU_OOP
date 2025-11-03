@@ -20,13 +20,24 @@ public class AuthService : IAuthService
 
     public void SignIn(User user)
     {
+        if (CurrentUser != null && CurrentUser.Id == user.Id)
+        {
+            Console.WriteLine($"Пользователь {CurrentUser.Name} уже авторизован");
+            return;
+        }
+        else if (CurrentUser != null && CurrentUser.Id != user.Id)
+        {
+            SignOut();
+        }
+       
         CurrentUser = user;
         SaveCurrentUser(user);
-        Console.WriteLine($"Авторизован пользователь {user.Name}");
+        Console.WriteLine($"Авторизован пользователь {CurrentUser.Name}");
     }
     
     public void SignOut()
     {
+        Console.WriteLine($"Пользователь {CurrentUser.Name} вышел из системы");
         CurrentUser = null;
         ClearSavedUser();
     }

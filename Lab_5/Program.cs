@@ -30,7 +30,7 @@ if (authService.IsAuthorized)
 
 //userRepo.Add(user1, user2, user3, user4);
 
-authService.SignIn(user3);
+authService.SignIn(user2);
 
 var updatedUser1 = user1 with {Email = "example@mail.ru"};
 userRepo.Update(updatedUser1);
