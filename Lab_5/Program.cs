@@ -28,10 +28,9 @@ if (authService.IsAuthorized)
     Console.WriteLine($"Автоматически авторизован пользователь: {authService.CurrentUser}");
 }
 
-userRepo.Add(user1, user2, user3, user4);
+//userRepo.Add(user1, user2, user3, user4);
 
-authService.SignIn(user1);
-Console.WriteLine($"\nПользователь авторизован: {authService.CurrentUser}");
+authService.SignIn(user3);
 
 var updatedUser1 = user1 with {Email = "example@mail.ru"};
 userRepo.Update(updatedUser1);

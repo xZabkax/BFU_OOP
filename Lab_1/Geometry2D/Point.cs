@@ -15,7 +15,7 @@ public class Point
         {
             if (value < 0 || value > MaxWidth)
                 throw new ArgumentOutOfRangeException(
-                    nameof(value),$"x должен быть в диапазоне [0, {MaxWidth}]");
+                    nameof(value),$"{nameof(X)} должен быть в диапазоне [0, {MaxWidth}]");
             _x = value;
         } 
     }
@@ -27,7 +27,7 @@ public class Point
         { 
             if (value < 0 || value > MaxHeight)
                 throw new ArgumentOutOfRangeException(
-                    nameof(value), $"y должен быть в диапазоне [0, {MaxHeight}]");
+                    nameof(value), $"{nameof(Y)} должен быть в диапазоне [0, {MaxHeight}]");
             _y = value;
         } 
     }

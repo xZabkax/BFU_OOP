@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using System.Text.Json;
+﻿using System.Text.Json;
 
 namespace Lab_5;
 
@@ -23,7 +22,7 @@ public abstract class DataRepository<T> : IDataRepository<T> where T : class
         }
         try
         {
-            var json = File.ReadAllText(_filePath);
+            var json = !string.IsNullOrEmpty(File.ReadAllText(_filePath)) ? File.ReadAllText(_filePath) : "[]";
             _items = JsonSerializer.Deserialize<List<T>>(json) ?? new List<T>();
         }
         catch (Exception e)
@@ -61,6 +60,13 @@ public abstract class DataRepository<T> : IDataRepository<T> where T : class
     {
         foreach (var item in items)
         {
+            var id = (int)item.GetType().GetProperty("Id")!.GetValue(item)!;
+            var itemInList = GetById(id);
+            if (itemInList is not null)
+            {
+                Console.WriteLine($"User with ID: {id} is already in the repository");
+                continue;
+            }
             _items.Add(item);
         }
         SaveData();

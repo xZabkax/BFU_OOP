@@ -114,15 +114,10 @@ public class Vector
     
     public static bool operator !=(Vector vectorA, Vector vectorB)
     {
-        return vectorA.X != vectorB.X || vectorA.Y != vectorB.Y;
+        return !(vectorA == vectorB);
     }
     
     // Скалярное произведение векторов
-    public static int operator *(Vector vectorA, Vector vectorB)
-    {
-        return vectorA.X * vectorB.X + vectorA.Y * vectorB.Y;
-    }
-
     public static int ScalarProduct(Vector vectorA, Vector vectorB)
     {
         return vectorA.X * vectorB.X + vectorA.Y * vectorB.Y;
@@ -130,7 +125,12 @@ public class Vector
     
     public int ScalarProduct(Vector otherVector)
     {
-        return X * otherVector.X + Y * otherVector.Y;
+        return ScalarProduct(this, otherVector);
+    }
+    
+    public static int operator *(Vector vectorA, Vector vectorB)
+    {
+        return ScalarProduct(vectorA, vectorB);
     }
     
     // Векторное произведение векторов (Возвращает значение z координаты результирующего вектора)
@@ -141,7 +141,7 @@ public class Vector
 
     public int VectorProduct(Vector otherVector)
     {
-        return X * otherVector.Y - Y * otherVector.X;
+        return VectorProduct(this, otherVector);
     }
     
     // Смешанное произведение векторов

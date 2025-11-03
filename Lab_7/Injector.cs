@@ -140,7 +140,6 @@ public class Injector
     
     private record Registration
     {
-        public Type ClassType { get; }
         public LifeStyle LifeStyle { get; }
         public Func<object> Factory { get; }
 
